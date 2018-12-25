@@ -1,5 +1,0 @@
-{
-  "terminal.integrated.env.osx": {
-    "PATH": "/Users/shahn/.platformio/penv/bin:/Users/shahn/.rvm/gems/ruby-2.1.6/bin:/Users/shahn/.rvm/gems/ruby-2.1.6@global/bin:/Users/shahn/.rvm/rubies/ruby-2.1.6/bin:/Users/shahn/.nvm/versions/node/v9.2.1/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/Postgres.app/Contents/Versions/latest/bin:/Users/shahn/.rvm/bin:/Users/shahn/Development/personal/productivity_tools/bin"
-  }
-}
