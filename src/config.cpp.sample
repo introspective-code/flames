@@ -1,0 +1,7 @@
+#include "config.h"
+
+const char *ssid = "<SSID>";
+const char *password = "<PASSWORD>";
+
+const char *mqttServer = "<MQTT_SERVER>";
+const int mqttPort = <MQTT_PORT>;

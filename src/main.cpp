@@ -2,11 +2,7 @@
 #include <FastLED.h>
 #include <PubSubClient.h>
 
-const char *ssid = "<SSID>";
-const char *password = "<PASSWORD>";
-
-const char *mqttServer = "<MQTTSERVER>";
-const int mqttPort = 1883;
+#include "config.h"
 
 #define NUM_LEDS 111
 #define DATA_PIN D4
@@ -21,7 +17,6 @@ bool flamesAreOn = false;
 void callback(char *topic, byte *payloadRaw, unsigned int length) {
   payloadRaw[length] = '\0';
   String payload = String((char *)payloadRaw);
-  Serial.println(payload);
   if (payload == "TURN FLAMES ON") {
     flamesAreOn = true;
   } else if (payload == "TURN FLAMES OFF") {
