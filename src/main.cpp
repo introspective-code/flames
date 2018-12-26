@@ -12,7 +12,7 @@ CRGB leds[NUM_LEDS];
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-enum Effects { Flames };
+enum Effects { Flames, RedGreenBlue };
 enum SwitchState { On, Off };
 
 Effects effect = Flames;
@@ -24,6 +24,8 @@ void callback(char *topic, byte *payloadRaw, unsigned int length) {
 
   if (payload == "Effect: Flames") {
     effect = Flames;
+  } else if (payload == "Effect: RedGreenBlue") {
+    effect = RedGreenBlue;
   } else if (payload == "Switch: On") {
     switchState = On;
   } else if (payload == "Switch: Off") {
@@ -94,6 +96,33 @@ void flameEffect() {
     leds[i].blue = b1;
   }
   delay(random(25, 125));
+  FastLED.show();
+}
+
+void redGreenBlueEffect() {
+  for (int i = 0; i < NUM_LEDS; i++) {
+    leds[i].red = 100;
+    leds[i].green = 0;
+    leds[i].blue = 0;
+  }
+  delay(1000);
+  FastLED.show();
+
+  for (int i = 0; i < NUM_LEDS; i++) {
+    leds[i].red = 0;
+    leds[i].green = 100;
+    leds[i].blue = 0;
+  }
+  delay(1000);
+  FastLED.show();
+
+  for (int i = 0; i < NUM_LEDS; i++) {
+    leds[i].red = 0;
+    leds[i].green = 0;
+    leds[i].blue = 100;
+  }
+  delay(1000);
+  FastLED.show();
 }
 
 void loop() {
@@ -106,7 +135,8 @@ void loop() {
   case Flames:
     flameEffect();
     break;
+  case RedGreenBlue:
+    redGreenBlueEffect();
+    break;
   }
-
-  FastLED.show();
 }
