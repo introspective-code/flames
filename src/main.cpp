@@ -1,11 +1,11 @@
 #include <FastLED.h>
 
 #define NUM_LEDS 111
-#define DATA_PIN 6
+#define DATA_PIN D4
 
 CRGB leds[NUM_LEDS];
 
-void setup() { 
+void setup() {
   FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
   FastLED.setBrightness(50);
 }
