@@ -1,3 +1,4 @@
+#include <ArduinoJson.h>
 #include <ESP8266WiFi.h>
 #include <FastLED.h>
 #include <PubSubClient.h>
@@ -12,7 +13,7 @@ CRGB leds[NUM_LEDS];
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-enum Effects { Flames, RedGreenBlue };
+enum Effects { Flames }; //, RedGreenBlue }; // RedGreenBlue disabled for now
 enum SwitchState { On, Off };
 
 Effects effect = Flames;
@@ -22,14 +23,18 @@ void callback(char *topic, byte *payloadRaw, unsigned int length) {
   payloadRaw[length] = '\0';
   String payload = String((char *)payloadRaw);
 
-  if (payload == "Effect: Flames") {
-    effect = Flames;
-  } else if (payload == "Effect: RedGreenBlue") {
-    effect = RedGreenBlue;
-  } else if (payload == "Switch: On") {
-    switchState = On;
-  } else if (payload == "Switch: Off") {
-    switchState = Off;
+  DynamicJsonBuffer jsonBuffer;
+  JsonObject &root = jsonBuffer.parseObject(payload);
+
+  String name = root["name"];
+  String characteristic = root["characteristic"];
+  bool value = root["value"];
+
+  if (name != deviceName)
+    return;
+
+  if (characteristic == "On") {
+    switchState = value ? On : Off;
   }
 }
 
@@ -62,8 +67,7 @@ void setup() {
   FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
   FastLED.setBrightness(50);
 
-  client.subscribe("homie/headboard_flames/strip/effect");
-  client.subscribe("homie/headboard_flames/strip/switch");
+  client.subscribe("homebridge/from/set");
 }
 
 void stripSwitchOff() {
@@ -99,31 +103,31 @@ void flameEffect() {
   FastLED.show();
 }
 
-void redGreenBlueEffect() {
-  for (int i = 0; i < NUM_LEDS; i++) {
-    leds[i].red = 100;
-    leds[i].green = 0;
-    leds[i].blue = 0;
-  }
-  delay(1000);
-  FastLED.show();
+// void redGreenBlueEffect() {
+//   for (int i = 0; i < NUM_LEDS; i++) {
+//     leds[i].red = 100;
+//     leds[i].green = 0;
+//     leds[i].blue = 0;
+//   }
+//   delay(1000);
+//   FastLED.show();
 
-  for (int i = 0; i < NUM_LEDS; i++) {
-    leds[i].red = 0;
-    leds[i].green = 100;
-    leds[i].blue = 0;
-  }
-  delay(1000);
-  FastLED.show();
+//   for (int i = 0; i < NUM_LEDS; i++) {
+//     leds[i].red = 0;
+//     leds[i].green = 100;
+//     leds[i].blue = 0;
+//   }
+//   delay(1000);
+//   FastLED.show();
 
-  for (int i = 0; i < NUM_LEDS; i++) {
-    leds[i].red = 0;
-    leds[i].green = 0;
-    leds[i].blue = 100;
-  }
-  delay(1000);
-  FastLED.show();
-}
+//   for (int i = 0; i < NUM_LEDS; i++) {
+//     leds[i].red = 0;
+//     leds[i].green = 0;
+//     leds[i].blue = 100;
+//   }
+//   delay(1000);
+//   FastLED.show();
+// }
 
 void loop() {
   client.loop();
@@ -135,8 +139,8 @@ void loop() {
   case Flames:
     flameEffect();
     break;
-  case RedGreenBlue:
-    redGreenBlueEffect();
-    break;
+    // case RedGreenBlue:
+    //   redGreenBlueEffect();
+    //   break;
   }
 }

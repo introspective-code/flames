@@ -1,5 +1,7 @@
 #include "config.h"
 
+const char *deviceName = "Flames";
+
 const char *ssid = "<SSID>";
 const char *password = "<PASSWORD>";
 
