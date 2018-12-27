@@ -55,7 +55,7 @@ void setup() {
   while (!client.connected()) {
     Serial.println("Connecting to MQTT...");
 
-    if (client.connect("Headboard Flames")) {
+    if (client.connect("Flames...")) {
       Serial.println("connected");
     } else {
       Serial.print("failed with state ");
